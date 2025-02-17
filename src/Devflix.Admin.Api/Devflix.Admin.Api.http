@@ -1,0 +1,6 @@
+@Devflix.Admin.Api_HostAddress = http://localhost:5206
+
+GET {{Devflix.Admin.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
