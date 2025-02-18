@@ -176,4 +176,19 @@ public class CategoryTest
         Assert.Equal(newValue.Name, category.Name);
         Assert.Equal(currentDescription, category.Description);
     }
+
+    [Theory(DisplayName = nameof(UpdateShouldThrowExceptionWhenNameIsNullOrEmpty))]
+    [Trait("Domain", "Category - Aggregate")]
+    [InlineData("")]
+    [InlineData(null)]
+    [InlineData("      ")]
+    public void UpdateShouldThrowExceptionWhenNameIsNullOrEmpty(string? name)
+    {
+        var category = new DomainEntity.Category("Old category name", "Old category description");
+
+        Action action = () => category.Update(name);
+
+        var exception = Assert.Throws<EntityValidationException>(action);
+        Assert.Equal("Name should not be empty or null", exception.Message);
+    }
 }
