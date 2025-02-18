@@ -132,4 +132,21 @@ public class CategoryTest
 
         Assert.True(category.IsActive);
     }
+
+    [Fact(DisplayName = nameof(DeactivateShouldChangeIsActiveToFalse))]
+    [Trait("Domain", "Category - Aggregate")]
+    public void DeactivateShouldChangeIsActiveToFalse()
+    {
+        var validData = new
+        {
+            Name = "Category name",
+            Description = "Category description"
+        };
+
+        var category = new DomainEntity.Category(validData.Name, validData.Description, true);
+
+        category.Deactivate();
+
+        Assert.False(category.IsActive);
+    }
 }
