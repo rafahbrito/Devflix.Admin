@@ -36,6 +36,8 @@ public class Category
     {
         Name = name;
         Description = description ?? Description;
+
+        Validate();
     }
 
     private void Validate()
