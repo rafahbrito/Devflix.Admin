@@ -1,4 +1,5 @@
-﻿using DomainEntity = Devflix.Admin.Domain.Entity;
+﻿using Devflix.Admin.Domain.Exceptions;
+using DomainEntity = Devflix.Admin.Domain.Entity;
 
 namespace Devflix.Admin.UnitTests.Domain.Entity.Category;
 public class CategoryTest
@@ -37,11 +38,10 @@ public class CategoryTest
         {
             Name = "Category name",
             Description = "Category description",
-            IsActive = isActive
         };
 
         var dateTimeBefore = DateTime.Now;
-        var category = new DomainEntity.Category(validData.Name, validData.Description, validData.IsActive);
+        var category = new DomainEntity.Category(validData.Name, validData.Description, isActive);
         var dateTimeAfter = DateTime.Now;
 
         Assert.NotNull(category);

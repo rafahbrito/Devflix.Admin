@@ -1,4 +1,6 @@
-﻿namespace Devflix.Admin.Domain.Entity;
+﻿using Devflix.Admin.Domain.Exceptions;
+
+namespace Devflix.Admin.Domain.Entity;
 public class Category
 {
     public Guid Id { get; private set; }
@@ -14,6 +16,13 @@ public class Category
         Description = description;
         IsActive = isActive;
         CreatedAt = DateTime.Now;
+
+        Validate();
     }
 
+    public void Validate()
+    {
+        if (String.IsNullOrWhiteSpace(Name))
+            throw new EntityValidationException($"{nameof(Name)} should not be empty or null");
+    }
 }
