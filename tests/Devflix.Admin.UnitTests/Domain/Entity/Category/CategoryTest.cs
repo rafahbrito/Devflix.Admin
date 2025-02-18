@@ -149,4 +149,17 @@ public class CategoryTest
 
         Assert.False(category.IsActive);
     }
+
+    [Fact(DisplayName = nameof(UpdateShouldModifyCategoryProperties))]
+    [Trait("Domain", "Category - Aggregate")]
+    public void UpdateShouldModifyCategoryProperties()
+    {
+        var category = new DomainEntity.Category("Old category name", "Old category description");
+        var newValues = new { Name = "New category name", Description = "New category description" };
+
+        category.Update(newValues.Name, newValues.Description);
+
+        Assert.Equal(newValues.Name, category.Name);
+        Assert.Equal(newValues.Description, category.Description);
+    }
 }
