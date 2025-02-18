@@ -53,4 +53,17 @@ public class CategoryTest
         Assert.True(category.CreatedAt < dateTimeAfter);
         Assert.Equal(isActive, category.IsActive);
     }
+
+    [Theory(DisplayName = nameof(InstantiateShouldThrowExceptionWhenNameIsNullOrEmpty))]
+    [Trait("Domain", "Category - Aggregate")]
+    [InlineData("")]
+    [InlineData(null)]
+    [InlineData("      ")]
+    public void InstantiateShouldThrowExceptionWhenNameIsNullOrEmpty(string? name)
+    {
+        Action action = () => new DomainEntity.Category(name, "Category description");
+
+        var exception = Assert.Throws<EntityValidationException>(action);
+        Assert.Equal("Name should not be empty or null", exception.Message);
+    }
 }
