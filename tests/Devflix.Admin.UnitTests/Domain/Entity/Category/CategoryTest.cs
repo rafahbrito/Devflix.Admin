@@ -103,4 +103,16 @@ public class CategoryTest
         var exception = Assert.Throws<EntityValidationException>(action);
         Assert.Equal("Name should be less or equal 255 characters long", exception.Message);
     }
+
+    [Fact(DisplayName = nameof(InstantiateErrorWhenDescriptionIsGreaterThan10_000Characters))]
+    [Trait("Domain", "Category - Aggregate")]
+    public void InstantiateErrorWhenDescriptionIsGreaterThan10_000Characters()
+    {
+        var description = String.Join(null, Enumerable.Range(0, 5001).Select(_ => "ab").ToArray()); //TODO: Melhorar lógica desse teste
+
+        Action action = () => new DomainEntity.Category("Category name", description);
+
+        var exception = Assert.Throws<EntityValidationException>(action);
+        Assert.Equal("Description should be less or equal 10.000 characters long", exception.Message);
+    }
 }
