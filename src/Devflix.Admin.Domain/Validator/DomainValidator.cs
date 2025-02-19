@@ -8,4 +8,10 @@ public class DomainValidator
         if (target is null)
             throw new EntityValidationException($"{fieldName} should not be null");
     }
+
+    public static void NotNullOrEmpty(string? target, string fieldName)
+    {
+        if (String.IsNullOrWhiteSpace(target))
+            throw new EntityValidationException($"{fieldName} should not be null or empty");
+    }
 }
