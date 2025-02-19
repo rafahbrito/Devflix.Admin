@@ -14,6 +14,17 @@ public class CategoryTest
         _categoryTestFixture = categoryTestFixture;
     }
 
+    public static IEnumerable<object[]> GetNamesWithLessThan3Characters(int numberOfTests = 6)
+    {
+        var fixture = new CategoryTestFixture();
+
+        for (int i = 0; i < numberOfTests; i++)
+        {
+            var isOdd = i % 2 == 1;
+            yield return new object[] { fixture.GetValidCategoryName()[..(isOdd ? 1 : 2)] };
+        }
+    }
+
     [Fact(DisplayName = nameof(Instantiate))]
     [Trait("Domain", "Category - Aggregate")]
     public void Instantiate()
@@ -86,10 +97,7 @@ public class CategoryTest
 
     [Theory(DisplayName = nameof(InstantiateErrorWhenNameIsLessThan3Characters))]
     [Trait("Domain", "Category - Aggregate")]
-    [InlineData("A")]
-    [InlineData("Ab")]
-    [InlineData("0")]
-    [InlineData("12")]
+    [MemberData(nameof(GetNamesWithLessThan3Characters), parameters: 6)]
     public void InstantiateErrorWhenNameIsLessThan3Characters(string name)
     {
         var validCategory = _categoryTestFixture.GetValidCategory();
@@ -203,10 +211,7 @@ public class CategoryTest
 
     [Theory(DisplayName = nameof(UpdateErrorWhenNameIsLessThan3Characters))]
     [Trait("Domain", "Category - Aggregate")]
-    [InlineData("A")]
-    [InlineData("Ab")]
-    [InlineData("0")]
-    [InlineData("12")]
+    [MemberData(nameof(GetNamesWithLessThan3Characters), parameters: 6)]
     public void UpdateErrorWhenNameIsLessThan3Characters(string name)
     {
         var category = _categoryTestFixture.GetValidCategory();
