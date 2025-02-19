@@ -107,9 +107,9 @@ public class CategoryTest
     {
         var validCategory = _categoryTestFixture.GetValidCategory();
 
-        var name = String.Join(null, Enumerable.Range(0, 130).Select(_ => "ab").ToArray()); //TODO: Melhorar lógica desse teste
+        var invalidName = _categoryTestFixture.Faker.Lorem.Letter(256);
 
-        Action action = () => new DomainEntity.Category(name, validCategory.Description);
+        Action action = () => new DomainEntity.Category(invalidName, validCategory.Description);
 
         action.Should()
               .Throw<EntityValidationException>()
@@ -122,9 +122,9 @@ public class CategoryTest
     {
         var validCategory = _categoryTestFixture.GetValidCategory();
 
-        var description = String.Join(null, Enumerable.Range(0, 5001).Select(_ => "ab").ToArray()); //TODO: Melhorar lógica desse teste
+        var invalidDescription = _categoryTestFixture.Faker.Lorem.Paragraphs(1_001);
 
-        Action action = () => new DomainEntity.Category(validCategory.Name, description);
+        Action action = () => new DomainEntity.Category(validCategory.Name, invalidDescription);
 
         action.Should()
               .Throw<EntityValidationException>()
@@ -163,12 +163,12 @@ public class CategoryTest
     public void UpdateShouldModifyCategoryProperties()
     {
         var category = _categoryTestFixture.GetValidCategory();
-        var newValues = new { Name = "New category name", Description = "New category description" };
+        var categoryWithNewValues = _categoryTestFixture.GetValidCategory();
 
-        category.Update(newValues.Name, newValues.Description);
+        category.Update(categoryWithNewValues.Name, categoryWithNewValues.Description);
 
-        category.Name.Should().Be(newValues.Name);
-        category.Description.Should().Be(newValues.Description);
+        category.Name.Should().Be(categoryWithNewValues.Name);
+        category.Description.Should().Be(categoryWithNewValues.Description);
     }
 
     [Fact(DisplayName = nameof(UpdateShouldChangeOnlyName))]
@@ -177,11 +177,11 @@ public class CategoryTest
     {
         var category = _categoryTestFixture.GetValidCategory();
         var currentDescription = category.Description;
-        var newValue = new { Name = "New category name" };
+        var newName = _categoryTestFixture.GetValidCategoryName();
 
-        category.Update(newValue.Name);
+        category.Update(newName);
 
-        category.Name.Should().Be(newValue.Name);
+        category.Name.Should().Be(newName);
         category.Description.Should().Be(currentDescription);
     }
 
@@ -224,9 +224,9 @@ public class CategoryTest
     {
         var category = _categoryTestFixture.GetValidCategory();
 
-        var newName = String.Join(null, Enumerable.Range(0, 130).Select(_ => "ab").ToArray()); //TODO: Melhorar lógica desse teste
+        var invalidName = _categoryTestFixture.Faker.Lorem.Letter(256);
 
-        Action action = () => category.Update(newName);
+        Action action = () => category.Update(invalidName);
 
         action.Should()
               .Throw<EntityValidationException>()
@@ -239,9 +239,9 @@ public class CategoryTest
     {
         var category = _categoryTestFixture.GetValidCategory();
 
-        var description = String.Join(null, Enumerable.Range(0, 5001).Select(_ => "ab").ToArray()); //TODO: Melhorar lógica desse teste
+        var invalidDescription = _categoryTestFixture.Faker.Lorem.Paragraphs(1_001);
 
-        Action action = () => category.Update("Category name", description);
+        Action action = () => category.Update("Category name", invalidDescription);
 
         action.Should()
               .Throw<EntityValidationException>()
