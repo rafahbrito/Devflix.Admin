@@ -9,7 +9,6 @@ public class DomainValidatorTest
 {
     private Faker Faker {  get; set; } = new Faker();
 
-    // Validar null
     [Fact(DisplayName = nameof(ValidateShouldPassWhenValueIsNotNull))]
     [Trait("Domain", "DomainValidation - Validators")]
     public void ValidateShouldPassWhenValueIsNotNull()
@@ -35,6 +34,17 @@ public class DomainValidatorTest
               .WithMessage($"{fieldName} should not be null");
     }
     // Validar null ou vazio
+    [Fact(DisplayName = nameof(ValidateShouldPassWhenStringIsNotNullOrEmpty))]
+    [Trait("Domain", "DomainValidation - Validators")]
+    public void ValidateShouldPassWhenStringIsNotNullOrEmpty()
+    {
+        string value = Faker.Commerce.Categories(1)[0];
+        string fieldName = Faker.Database.Column();
+
+        Action action = () => DomainValidator.NotNullOrEmpty(value, fieldName);
+
+        action.Should().NotThrow();
+    }
     // Validar tamanho min
     // Validar tamanho max
 }
