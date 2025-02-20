@@ -34,6 +34,32 @@ public class DomainValidatorTest
         }
     }
 
+    public static IEnumerable<object[]> GetValuesSmallerThanMaxLength(int numberOfTests = 5)
+    {
+        Faker faker = new();
+        Random random = new();
+
+        for (int i = 0; i < numberOfTests; i++)
+        {
+            string value = faker.Commerce.ProductName();
+            int maxLength = value.Length + random.Next(1, 20);
+            yield return new object[] { value, maxLength };
+        }
+    }
+
+    public static IEnumerable<object[]> GetValuesGreaterThanMaxLength(int numberOfTests = 5)
+    {
+        Faker faker = new();
+        Random random = new();
+
+        for (int i = 0; i < numberOfTests; i++)
+        {
+            string value = faker.Commerce.ProductName();
+            int maxLength = random.Next(1, (value.Length - 1));
+            yield return new object[] { value, maxLength };
+        }
+    }
+
     [Fact(DisplayName = nameof(ValidateShouldPassWhenValueIsNotNull))]
     [Trait("Domain", "DomainValidation - Validators")]
     public void ValidateShouldPassWhenValueIsNotNull()
@@ -76,7 +102,6 @@ public class DomainValidatorTest
     [InlineData(null)]
     [InlineData("")]
     [InlineData("      ")]
-
     public void ValidateShouldThrowExceptionWhenStringIsNullOrEmpty(string target)
     { 
         string fieldName = Faker.Database.Column();
@@ -113,5 +138,30 @@ public class DomainValidatorTest
               .Throw<EntityValidationException>()
               .WithMessage($"{fieldName} should be at leats {minLength} characters long");
     }
-    // Validar tamanho max
+
+    [Theory(DisplayName = nameof(ValidateShouldPassWhenValueIsGreaterThanMaxLength))]
+    [Trait("Domain", "DomainValidation - Validators")]
+    [MemberData(nameof(GetValuesSmallerThanMaxLength), parameters: 10)]
+    public void ValidateShouldPassWhenValueIsGreaterThanMaxLength(string target, int maxLength)
+    {
+        string fieldName = Faker.Database.Column();
+
+        Action action = () => DomainValidator.MaxLength(target, maxLength, fieldName);
+
+        action.Should().NotThrow();
+    }
+
+    [Theory(DisplayName = nameof(ValidateShouldThrowExceptionWhenValueIsGreaterThanMaxLength))]
+    [Trait("Domain", "DomainValidation - Validators")]
+    [MemberData(nameof(GetValuesGreaterThanMaxLength), parameters: 10)]
+    public void ValidateShouldThrowExceptionWhenValueIsGreaterThanMaxLength(string target, int maxLength)
+    {
+        string fieldName = Faker.Database.Column();
+
+        Action action = () => DomainValidator.MaxLength(target, maxLength, fieldName);
+
+        action.Should()
+              .Throw<EntityValidationException>()
+              .WithMessage($"{fieldName} should be less or equal {maxLength} characters long");
+    }
 }
