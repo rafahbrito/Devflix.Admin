@@ -110,7 +110,7 @@ public class DomainValidatorTest
 
         action.Should()
               .Throw<EntityValidationException>()
-              .WithMessage($"{fieldName} should not be null or empty");
+              .WithMessage($"{fieldName} should not be empty or null");
     }
 
     [Theory(DisplayName = nameof(ValidateShouldPassWhenValueIsEqualOrGreaterThanMinLength))]
