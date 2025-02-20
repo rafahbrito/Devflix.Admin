@@ -1,5 +1,6 @@
 ﻿using Devflix.Admin.Domain.Exceptions;
 using Devflix.Admin.Domain.SeedWork;
+using Devflix.Admin.Domain.Validator;
 
 namespace Devflix.Admin.Domain.Entity;
 public class Category : AggregateRoot
@@ -41,19 +42,11 @@ public class Category : AggregateRoot
 
     private void Validate()
     {
-        if (String.IsNullOrWhiteSpace(Name))
-            throw new EntityValidationException($"{nameof(Name)} should not be empty or null");
+        DomainValidator.NotNullOrEmpty(Name, nameof(Name));
+        DomainValidator.MinLength(Name, 3, nameof(Name));
+        DomainValidator.MaxLength(Name, 255, nameof(Name));
 
-        if (Name.Length < 3)
-            throw new EntityValidationException($"{nameof(Name)} should be at leats 3 characters long");
-
-        if (Name.Length > 255)
-            throw new EntityValidationException($"{nameof(Name)} should be less or equal 255 characters long");
-
-        if (Description is null)
-            throw new EntityValidationException($"{nameof(Description)} should not be null");
-
-        if (Description.Length > 10_000)
-            throw new EntityValidationException($"{nameof(Description)} should be less or equal 10.000 characters long");
+        DomainValidator.NotNull(Description, nameof(Description));
+        DomainValidator.MaxLength(Description, 10_000, nameof(Description));
     }
 }
