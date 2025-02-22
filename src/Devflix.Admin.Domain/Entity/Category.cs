@@ -1,5 +1,4 @@
-﻿using Devflix.Admin.Domain.Exceptions;
-using Devflix.Admin.Domain.SeedWork;
+﻿using Devflix.Admin.Domain.SeedWork;
 using Devflix.Admin.Domain.Validator;
 
 namespace Devflix.Admin.Domain.Entity;
