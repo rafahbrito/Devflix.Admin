@@ -1,10 +1,11 @@
 ﻿using Devflix.Admin.Domain.Repository;
 using DomainEntity = Devflix.Admin.Domain.Entity;
 using FluentAssertions;
-using Moq;
 using UseCases = Devflix.Admin.Application.UseCases.Category.CreateCategory;
+using Moq;
+using Devflix.Admin.Application.Interfaces;
 
-namespace Devflix.Admin.UnitTests.Application.UseCases.Category.CreateCategory;
+namespace Devflix.Admin.UnitTests.Application.Category.CreateCategory;
 public class CreateCategoryTest
 {
     [Fact(DisplayName = nameof(CreateCategory))]
@@ -18,7 +19,7 @@ public class CreateCategoryTest
             unitOfWorkMock.Object
         );
 
-        var input = new CreateCategoryInput(
+        var input = new UseCases.CreateCategoryRequest(
             "Category name",
             "Category Description",
             true
