@@ -1,0 +1,7 @@
+﻿using Devflix.Admin.Domain.Entity;
+
+namespace Devflix.Admin.Domain.SeedWork;
+public interface IGenericRepository<TAggregate> : IRepository
+{
+    public Task Insert(TAggregate aggregate, CancellationToken cancellationToken);
+}
