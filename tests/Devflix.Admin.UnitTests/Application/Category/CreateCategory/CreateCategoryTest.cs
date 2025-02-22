@@ -6,24 +6,29 @@ using Moq;
 using Devflix.Admin.Application.Interfaces;
 
 namespace Devflix.Admin.UnitTests.Application.Category.CreateCategory;
+
+[Collection(nameof(CreateCategoryTestFixture))]
 public class CreateCategoryTest
 {
+    private readonly CreateCategoryTestFixture _fixture;
+
+    public CreateCategoryTest(CreateCategoryTestFixture fixture)
+    {
+        _fixture = fixture;
+    }
+
     [Fact(DisplayName = nameof(CreateCategory))]
     [Trait("Application", "CreateCategory - UseCases")]
     public async Task CreateCategory()
     {
-        var repositoryMock = new Mock<ICategoryRepository>();
-        var unitOfWorkMock = new Mock<IUnitOfWork>();
+        var repositoryMock = _fixture.GetRepositoryMock();
+        var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
         var useCase = new UseCases.CreateCategoryHandler(
             repositoryMock.Object, 
             unitOfWorkMock.Object
         );
 
-        var input = new UseCases.CreateCategoryRequest(
-            "Category name",
-            "Category Description",
-            true
-        );
+        var input = _fixture.GetValidRequest();
 
         var output = await useCase.Handle(input, CancellationToken.None);
 
