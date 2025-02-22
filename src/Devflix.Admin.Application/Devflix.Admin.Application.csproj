@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Devflix.Admin.Domain\Devflix.Admin.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
