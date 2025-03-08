@@ -46,6 +46,44 @@ public class CreateCategoryTestFixture : BaseFixture
             GetRandomBoolean()
         );
 
+    public CreateCategoryRequest GetInvalidRequestWithNullName()
+        => new(
+            null,
+            GetValidCategoryDescription(),
+            GetRandomBoolean()
+        );
+
+    public CreateCategoryRequest GetInvalidRequestWithShortName()
+    {
+        string name = Faker.Commerce.Categories(1)[0];
+        string invalidName = name[..2];
+        return new(
+            invalidName,
+            GetValidCategoryDescription(),
+            GetRandomBoolean()
+        );
+    }
+
+    public CreateCategoryRequest GetInvalidRequestWithLongName()
+    {
+        string longName = Faker.Lorem.Letter(256);
+        return new(
+            longName,
+            GetValidCategoryDescription(),
+            GetRandomBoolean()
+        );
+    }
+
+    public CreateCategoryRequest GetInvalidRequestWithLongDescription()
+    {
+        string longDescription = Faker.Lorem.Paragraphs(1_001);
+        return new(
+            GetValidCategoryName(),
+            longDescription,
+            GetRandomBoolean()
+        );
+    }
+
     public Mock<ICategoryRepository> GetRepositoryMock() => new();
 
     public Mock<IUnitOfWork> GetUnitOfWorkMock() => new();

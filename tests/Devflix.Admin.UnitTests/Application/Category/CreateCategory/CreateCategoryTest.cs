@@ -17,33 +17,6 @@ public class CreateCategoryTest
         _fixture = fixture;
     }
 
-    public static IEnumerable<object[]> GetInvalidRequests()
-    {
-        var fixture = new CreateCategoryTestFixture();
-        var invalidRequestsList = new List<object[]>();
-
-        var nameNullRequest = fixture.GetValidRequest();
-        nameNullRequest.Name = null;
-        invalidRequestsList.Add([nameNullRequest, "Name should not be empty or null"]);
-
-        var shortNameRequest = fixture.GetValidRequest();
-        shortNameRequest.Name = shortNameRequest.Name.Substring(0,2);
-        invalidRequestsList.Add([shortNameRequest, "Name should be at leats 3 characters long"]);
-
-        var longName = fixture.Faker.Lorem.Letter(256);
-        var tooLongNameRequest = fixture.GetValidRequest();
-        tooLongNameRequest.Name = longName;
-        invalidRequestsList.Add([tooLongNameRequest, "Name should be less or equal 255 characters long"]);
-
-        var longDescription = fixture.Faker.Lorem.Paragraphs(1_001);
-        var longDescriptionRequest = fixture.GetValidRequest();
-        longDescriptionRequest.Description = longDescription;
-        invalidRequestsList.Add([longDescriptionRequest, "Description should be less or equal 10000 characters long"]);
-
-
-        return invalidRequestsList;
-    }
-
     [Fact(DisplayName = nameof(CreateCategory))]
     [Trait("Application", "CreateCategory - UseCases")]
     public async Task CreateCategory()
@@ -82,7 +55,11 @@ public class CreateCategoryTest
 
     [Theory(DisplayName = nameof(CreateCategoryShouldThrowExceptionWhenRequestIsInvalid))]
     [Trait("Application", "CreateCategory - UseCases")]
-    [MemberData(nameof(GetInvalidRequests))]
+    [MemberData(
+        nameof(CreateCategoryTestDataGenerator.GetInvalidRequests),
+        parameters: 12,
+        MemberType = typeof(CreateCategoryTestDataGenerator)
+    )]
     public async Task CreateCategoryShouldThrowExceptionWhenRequestIsInvalid(
         CreateCategoryRequest input,
         string exceptionMessage
