@@ -101,4 +101,41 @@ public class CreateCategoryTest
                   .ThrowAsync<EntityValidationException>()
                   .WithMessage(exceptionMessage);
     }
+
+    [Fact(DisplayName = nameof(CreateCategoryShouldSetEmptyDescriptionWhenNotProvided))]
+    [Trait("Application", "CreateCategory - UseCases")]
+    public async Task CreateCategoryShouldSetEmptyDescriptionWhenNotProvided()
+    {
+        var repositoryMock = _fixture.GetRepositoryMock();
+        var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
+        var useCase = new UseCases.CreateCategoryHandler(
+            repositoryMock.Object,
+            unitOfWorkMock.Object
+        );
+
+        var validName = _fixture.GetValidCategoryName();
+        var input = new CreateCategoryRequest(validName);
+
+        var output = await useCase.Handle(input, CancellationToken.None);
+
+        repositoryMock.Verify(
+            repository => repository.Insert(
+                It.IsAny<DomainEntity.Category>(),
+                It.IsAny<CancellationToken>()
+            ),
+            Times.Once
+        );
+
+        unitOfWorkMock.Verify(
+            unitOfWork => unitOfWork.Commit(It.IsAny<CancellationToken>()),
+            Times.Once
+        );
+
+        output.Should().NotBeNull();
+        output.Name.Should().Be(input.Name);
+        output.Description.Should().Be(String.Empty);
+        output.IsActive.Should().BeTrue();
+        output.Id.Should().NotBeEmpty();
+        output.CreatedAt.Should().NotBeSameDateAs(default);
+    }
 }
