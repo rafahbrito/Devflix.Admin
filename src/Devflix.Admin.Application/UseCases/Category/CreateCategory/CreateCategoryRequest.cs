@@ -1,5 +1,7 @@
-﻿namespace Devflix.Admin.Application.UseCases.Category.CreateCategory;
-public class CreateCategoryRequest
+﻿using MediatR;
+
+namespace Devflix.Admin.Application.UseCases.Category.CreateCategory;
+public class CreateCategoryRequest : IRequest<CreateCategoryResponse>
 {
     public string Name { get; set; }
     public string Description { get; set; }
