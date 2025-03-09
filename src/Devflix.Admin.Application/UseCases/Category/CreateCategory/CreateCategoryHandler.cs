@@ -2,8 +2,8 @@
 using Devflix.Admin.Domain.Repository;
 using DomainEntity = Devflix.Admin.Domain.Entity;
 
-
 namespace Devflix.Admin.Application.UseCases.Category.CreateCategory;
+
 public class CreateCategoryHandler : ICreateCategoryHandler
 {
     private readonly IUnitOfWork _unitOfWork;
@@ -15,7 +15,10 @@ public class CreateCategoryHandler : ICreateCategoryHandler
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<CreateCategoryResponse> Handle(CreateCategoryRequest request, CancellationToken cancellationToken)
+    public async Task<CreateCategoryResponse> Handle(
+        CreateCategoryRequest request,
+        CancellationToken cancellationToken
+    )
     {
         var category = new DomainEntity.Category(
             request.Name,

@@ -1,4 +1,5 @@
 ﻿namespace Devflix.Admin.Application.UseCases.Category.CreateCategory;
+
 public class CreateCategoryResponse
 {
     public Guid Id { get; set; }
@@ -13,7 +14,7 @@ public class CreateCategoryResponse
         string description,
         bool isActive,
         DateTime createdAt
-        )
+    )
     {
         Id = id;
         Name = name;

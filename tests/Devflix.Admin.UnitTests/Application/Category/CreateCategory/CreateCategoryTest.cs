@@ -24,7 +24,7 @@ public class CreateCategoryTest
         var repositoryMock = _fixture.GetRepositoryMock();
         var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
         var useCase = new UseCases.CreateCategoryHandler(
-            repositoryMock.Object, 
+            repositoryMock.Object,
             unitOfWorkMock.Object
         );
 
@@ -33,10 +33,8 @@ public class CreateCategoryTest
         var output = await useCase.Handle(input, CancellationToken.None);
 
         repositoryMock.Verify(
-            repository => repository.Insert(
-                It.IsAny<DomainEntity.Category>(),
-                It.IsAny<CancellationToken>()
-            ),
+            repository =>
+                repository.Insert(It.IsAny<DomainEntity.Category>(), It.IsAny<CancellationToken>()),
             Times.Once
         );
 
@@ -63,7 +61,7 @@ public class CreateCategoryTest
     public async Task CreateCategoryShouldThrowExceptionWhenRequestIsInvalid(
         CreateCategoryRequest input,
         string exceptionMessage
-        )
+    )
     {
         var repositoryMock = _fixture.GetRepositoryMock();
         var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
@@ -74,9 +72,7 @@ public class CreateCategoryTest
 
         Func<Task> task = async () => await useCase.Handle(input, CancellationToken.None);
 
-        await task.Should()
-                  .ThrowAsync<EntityValidationException>()
-                  .WithMessage(exceptionMessage);
+        await task.Should().ThrowAsync<EntityValidationException>().WithMessage(exceptionMessage);
     }
 
     [Fact(DisplayName = nameof(CreateCategoryShouldSetEmptyDescriptionWhenNotProvided))]
@@ -96,10 +92,8 @@ public class CreateCategoryTest
         var output = await useCase.Handle(input, CancellationToken.None);
 
         repositoryMock.Verify(
-            repository => repository.Insert(
-                It.IsAny<DomainEntity.Category>(),
-                It.IsAny<CancellationToken>()
-            ),
+            repository =>
+                repository.Insert(It.IsAny<DomainEntity.Category>(), It.IsAny<CancellationToken>()),
             Times.Once
         );
 

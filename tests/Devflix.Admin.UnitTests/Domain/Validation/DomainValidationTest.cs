@@ -4,9 +4,10 @@ using Devflix.Admin.Domain.Validator;
 using FluentAssertions;
 
 namespace Devflix.Admin.UnitTests.Domain.Validation;
+
 public class DomainValidatorTest
 {
-    private Faker Faker {  get; set; } = new Faker();
+    private Faker Faker { get; set; } = new Faker();
 
     public static IEnumerable<object[]> GetValuesSmallerThanMinLength(int numberOfTests = 5)
     {
@@ -80,9 +81,10 @@ public class DomainValidatorTest
 
         Action action = () => DomainValidator.NotNull(value, fieldName);
 
-        action.Should()
-              .Throw<EntityValidationException>()
-              .WithMessage($"{fieldName} should not be null");
+        action
+            .Should()
+            .Throw<EntityValidationException>()
+            .WithMessage($"{fieldName} should not be null");
     }
 
     [Fact(DisplayName = nameof(ValidateShouldPassWhenStringIsNotNullOrEmpty))]
@@ -103,20 +105,24 @@ public class DomainValidatorTest
     [InlineData("")]
     [InlineData("      ")]
     public void ValidateShouldThrowExceptionWhenStringIsNullOrEmpty(string target)
-    { 
+    {
         string fieldName = Faker.Database.Column();
 
         Action action = () => DomainValidator.NotNullOrEmpty(target, fieldName);
 
-        action.Should()
-              .Throw<EntityValidationException>()
-              .WithMessage($"{fieldName} should not be empty or null");
+        action
+            .Should()
+            .Throw<EntityValidationException>()
+            .WithMessage($"{fieldName} should not be empty or null");
     }
 
     [Theory(DisplayName = nameof(ValidateShouldPassWhenValueIsEqualOrGreaterThanMinLength))]
     [Trait("Domain", "DomainValidation - Validators")]
     [MemberData(nameof(GetValuesGreaterThanMinLength), parameters: 10)]
-    public void ValidateShouldPassWhenValueIsEqualOrGreaterThanMinLength(string target, int minLength)
+    public void ValidateShouldPassWhenValueIsEqualOrGreaterThanMinLength(
+        string target,
+        int minLength
+    )
     {
         string fieldName = Faker.Database.Column();
 
@@ -128,15 +134,19 @@ public class DomainValidatorTest
     [Theory(DisplayName = nameof(ValidateShouldThrowExceptionWhenValueIsShorterThanMinLength))]
     [Trait("Domain", "DomainValidation - Validators")]
     [MemberData(nameof(GetValuesSmallerThanMinLength), parameters: 10)]
-    public void ValidateShouldThrowExceptionWhenValueIsShorterThanMinLength(string target, int minLength)
+    public void ValidateShouldThrowExceptionWhenValueIsShorterThanMinLength(
+        string target,
+        int minLength
+    )
     {
         string fieldName = Faker.Database.Column();
 
         Action action = () => DomainValidator.MinLength(target, minLength, fieldName);
 
-        action.Should()
-              .Throw<EntityValidationException>()
-              .WithMessage($"{fieldName} should be at leats {minLength} characters long");
+        action
+            .Should()
+            .Throw<EntityValidationException>()
+            .WithMessage($"{fieldName} should be at leats {minLength} characters long");
     }
 
     [Theory(DisplayName = nameof(ValidateShouldPassWhenValueIsGreaterThanMaxLength))]
@@ -154,14 +164,18 @@ public class DomainValidatorTest
     [Theory(DisplayName = nameof(ValidateShouldThrowExceptionWhenValueIsGreaterThanMaxLength))]
     [Trait("Domain", "DomainValidation - Validators")]
     [MemberData(nameof(GetValuesGreaterThanMaxLength), parameters: 10)]
-    public void ValidateShouldThrowExceptionWhenValueIsGreaterThanMaxLength(string target, int maxLength)
+    public void ValidateShouldThrowExceptionWhenValueIsGreaterThanMaxLength(
+        string target,
+        int maxLength
+    )
     {
         string fieldName = Faker.Database.Column();
 
         Action action = () => DomainValidator.MaxLength(target, maxLength, fieldName);
 
-        action.Should()
-              .Throw<EntityValidationException>()
-              .WithMessage($"{fieldName} should be less or equal {maxLength} characters long");
+        action
+            .Should()
+            .Throw<EntityValidationException>()
+            .WithMessage($"{fieldName} should be less or equal {maxLength} characters long");
     }
 }

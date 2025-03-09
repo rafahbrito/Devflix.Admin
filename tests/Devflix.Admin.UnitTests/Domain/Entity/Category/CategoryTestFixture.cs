@@ -2,11 +2,11 @@
 using DomainEntity = Devflix.Admin.Domain.Entity;
 
 namespace Devflix.Admin.UnitTests.Domain.Entity.Category;
+
 public class CategoryTestFixture : BaseFixture
 {
-    public CategoryTestFixture() : base()
-    {
-    }
+    public CategoryTestFixture()
+        : base() { }
 
     public string GetValidCategoryName()
     {

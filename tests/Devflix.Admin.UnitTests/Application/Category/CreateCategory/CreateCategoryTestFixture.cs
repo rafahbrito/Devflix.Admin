@@ -7,8 +7,7 @@ using Moq;
 namespace Devflix.Admin.UnitTests.Application.Category.CreateCategory;
 
 [CollectionDefinition(nameof(CreateCategoryTestFixture))]
-public class CreateCategoryTestFixtureCollection 
-    : ICollectionFixture<CreateCategoryTestFixture> { }
+public class CreateCategoryTestFixtureCollection : ICollectionFixture<CreateCategoryTestFixture> { }
 
 public class CreateCategoryTestFixture : BaseFixture
 {
@@ -39,49 +38,29 @@ public class CreateCategoryTestFixture : BaseFixture
 
     public bool GetRandomBoolean() => _random.Next(2) == 0;
 
-    public CreateCategoryRequest GetValidRequest() 
-        => new(
-            GetValidCategoryName(),
-            GetValidCategoryDescription(),
-            GetRandomBoolean()
-        );
+    public CreateCategoryRequest GetValidRequest() =>
+        new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandomBoolean());
 
-    public CreateCategoryRequest GetInvalidRequestWithNullName()
-        => new(
-            null,
-            GetValidCategoryDescription(),
-            GetRandomBoolean()
-        );
+    public CreateCategoryRequest GetInvalidRequestWithNullName() =>
+        new(null, GetValidCategoryDescription(), GetRandomBoolean());
 
     public CreateCategoryRequest GetInvalidRequestWithShortName()
     {
         string name = Faker.Commerce.Categories(1)[0];
         string invalidName = name[..2];
-        return new(
-            invalidName,
-            GetValidCategoryDescription(),
-            GetRandomBoolean()
-        );
+        return new(invalidName, GetValidCategoryDescription(), GetRandomBoolean());
     }
 
     public CreateCategoryRequest GetInvalidRequestWithLongName()
     {
         string longName = Faker.Lorem.Letter(256);
-        return new(
-            longName,
-            GetValidCategoryDescription(),
-            GetRandomBoolean()
-        );
+        return new(longName, GetValidCategoryDescription(), GetRandomBoolean());
     }
 
     public CreateCategoryRequest GetInvalidRequestWithLongDescription()
     {
         string longDescription = Faker.Lorem.Paragraphs(1_001);
-        return new(
-            GetValidCategoryName(),
-            longDescription,
-            GetRandomBoolean()
-        );
+        return new(GetValidCategoryName(), longDescription, GetRandomBoolean());
     }
 
     public Mock<ICategoryRepository> GetRepositoryMock() => new();
